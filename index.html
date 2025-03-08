@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Progress Logger</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #progressLog {
+            text-align: left;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Puzzle Progress Logger</h1>
+    <button id="logButton">Log Progress</button>
+    <button id="clearButton">Clear Data</button>
+    <button id="exportButton">Export to XLSX</button>
+    <div id="progressLog"></div>
+
+    <script>
+        const logButton = document.getElementById('logButton');
+        const clearButton = document.getElementById('clearButton');
+        const exportButton = document.getElementById('exportButton');
+        const progressLog = document.getElementById('progressLog');
+        let pressCount = 0;
+
+        // Load existing data from local storage
+        let storedData = JSON.parse(localStorage.getItem('puzzleProgress')) || [];
+        updateLogDisplay();
+
+        logButton.addEventListener('click', () => {
+            pressCount++;
+            const timestamp = new Date().toISOString().replace('T', ' ').substr(0, 19);
+            const logEntry = { count: pressCount, timestamp: timestamp };
+            
+            storedData.push(logEntry);
+            localStorage.setItem('puzzleProgress', JSON.stringify(storedData));
+            updateLogDisplay();
+        });
+
+        clearButton.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear all data?')) {
+                storedData = [];
+                pressCount = 0;
+                localStorage.removeItem('puzzleProgress');
+                updateLogDisplay();
+            }
+        });
+
+        exportButton.addEventListener('click', () => {
+            const ws = XLSX.utils.json_to_sheet(storedData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Puzzle Progress");
+            XLSX.writeFile(wb, "puzzle_progress.xlsx");
+        });
+
+        function updateLogDisplay() {
+            progressLog.innerHTML = storedData.map(entry => 
+                `<p>Press #${entry.count} at ${entry.timestamp}</p>`
+            ).join('');
+        }
+    </script>
+</body>
+</html>
