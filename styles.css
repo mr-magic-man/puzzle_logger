@@ -60,3 +60,30 @@ marquee {
     margin-top: 30px;
     text-shadow: 1px 1px #FFA07A; /* Glow effect */
 }
+
+#leftGif, #rightGif {
+    width: 100px; /* Adjust the width as needed */
+    height: auto;
+    vertical-align: top;
+}
+
+#leftGif {
+    margin-right: 10px;
+}
+
+#rightGif {
+    margin-left: 10px;
+}
+
+#progressLog {
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    border: 1px solid #FFA07A; /* Desaturated orange border */
+    padding: 15px;
+    height: 400px;
+    overflow-y: auto;
+    background-color: #FFD7BE; /* Light desaturated orange background */
+    box-shadow: 0 0 10px #FFA07A; /* Glow effect */
+    width: calc(100% - 220px); /* Adjust width to fit between GIFs */
+}
