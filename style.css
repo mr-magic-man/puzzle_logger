@@ -1,0 +1,49 @@
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #C51077; /* Bright saturated purple */
+    color: #FFFFFF; /* White text */
+    text-align: center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='100%25' height='100%25' fill='none' rx='0'/%3E%3Crect x='0' y='0' width='100%25' height='10' fill='%23FFA07A' rx='0'/%3E%3Crect x='0' y='10' width='10' height='100%25' fill='%23FFA07A' rx='0'/%3E%3C/svg%3E");
+    background-size: 20px 20px;
+}
+
+button {
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    background-color: #FF69B4; /* Bright pink */
+    color: #000000; /* Black text */
+    border: 2px solid #FFA07A; /* Desaturated orange border */
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #FFC0CB; /* Lighter pink on hover */
+}
+
+#progressLog {
+    text-align: left;
+    border: 1px solid #FFA07A; /* Desaturated orange border */
+    padding: 10px;
+    margin-top: 20px;
+    height: 300px;
+    overflow-y: auto;
+    background-color: #FFD7BE; /* Light desaturated orange background */
+}
+
+h1 {
+    color: #FF69B4; /* Bright pink header */
+    text-shadow: 2px 2px #FFA07A; /* Desaturated orange text shadow */
+}
+
+table {
+    margin: 0 auto;
+}
+
+marquee {
+    color: #FF69B4;
+    font-size: 16px;
+    margin-top: 20px;
+}
