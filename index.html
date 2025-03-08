@@ -10,20 +10,22 @@
 <body>
     <h1>Puzzle Progress Logger</h1>
     <table align="center">
-        <tr>
-            <td>
-                <button id="startButton">Start Puzzle</button>
-                <button id="logButton">Log Progress</button>
-                <button id="clearButton">Clear Data</button>
-                <button id="exportButton">Export to XLSX</button>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div id="progressLog"></div>
-            </td>
-        </tr>
-    </table>
+    <tr>
+        <td>
+            <button id="startButton">Start Puzzle</button>
+            <button id="logButton">Log Progress</button>
+            <button id="clearButton">Clear Data</button>
+            <button id="exportButton">Export to XLSX</button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="bear.gif" id="leftGif" />
+            <div id="progressLog"></div>
+            <img src="bear.gif" id="rightGif" />
+        </td>
+    </tr>
+</table>
     <marquee>Welcome to the Puzzle Progress Logger!</marquee>
 
     <script>
