@@ -3,37 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puzzle Progress Logger</title>
+    <title>Rad Puzzle Progress Logger</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
         body {
-            
-            font-family: Arial, sans-serif;
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(to bottom, #1E0033, #4B0082);
+            color: #00FFFF;
             text-align: center;
-            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
         }
+
+        h1 {
+            color: #FF69B4;
+            text-shadow: 3px 3px #FFA500, -3px -3px #00FFFF;
+            font-size: 36px;
+            animation: blink 1s infinite;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        #leftGif, #rightGif {
+            width: 100px;
+            height: auto;
+        }
+
         #progressLog {
-            width: 80%;
-            margin: 20px auto;
-            height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
             text-align: left;
+            border: 3px solid #FFA500;
+            border-radius: 15px;
+            padding: 15px;
+            height: 400px;
+            width: 60%;
+            overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 20px #FFA500;
+            margin: 0 20px;
+            color: #00FFFF;
         }
+
         button {
-            margin: 10px;
-            padding: 5px 10px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            padding: 15px 30px;
+            margin: 15px;
+            cursor: pointer;
+            background-color: #FF69B4;
+            color: #000000;
+            border: 2px solid #FFA500;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #FF69B4;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #FFC0CB;
+            box-shadow: 0 0 20px #FFC0CB;
+            transform: scale(1.1);
+        }
+
+        marquee {
+            color: #FFA500;
+            font-size: 24px;
+            margin-top: 30px;
+            text-shadow: 2px 2px #FF1493;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        #fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
         }
     </style>
 </head>
 <body>
-    <h1>Puzzle Progress Logger</h1>
-    <button id="startButton">Start Puzzle</button>
-    <button id="logButton">Log Progress</button>
-    <button id="clearButton">Clear Data</button>
-    <button id="exportButton">Export to XLSX</button>
-    <div id="progressLog"></div>
+    <h1>Rad Puzzle Progress Logger</h1>
+    <div>
+        <button id="startButton">Start Puzzle</button>
+        <button id="logButton">Log Progress</button>
+        <button id="clearButton">Clear Data</button>
+        <button id="exportButton">Export to XLSX</button>
+    </div>
+    <div class="container">
+        <img src="bear.gif" id="leftGif" alt="Left Bear GIF" />
+        <div id="progressLog"></div>
+        <img src="bear.gif" id="rightGif" alt="Right Bear GIF" />
+    </div>
+    <marquee>Welcome to the Totally Tubular Puzzle Progress Logger!</marquee>
+    <canvas id="fireworks"></canvas>
 
     <script>
         const startButton = document.getElementById('startButton');
@@ -51,6 +127,7 @@
             if (pressCount === -1 || confirm('Are you sure you want to restart the puzzle?')) {
                 pressCount = -1;
                 logProgress('Start');
+                createFireworks();
             }
         });
 
@@ -88,6 +165,55 @@
             progressLog.innerHTML = storedData.map(entry => 
                 `<p>${entry.type} #${entry.count} at ${entry.timestamp}</p>`
             ).join('');
+        }
+
+        function createFireworks() {
+            const canvas = document.getElementById('fireworks');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            function Firework() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.sx = Math.random() * 3 - 1.5;
+                this.sy = Math.random() * -3 - 3;
+                this.size = Math.random() * 2 + 1;
+                this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            }
+
+            Firework.prototype.update = function() {
+                this.x += this.sx;
+                this.y += this.sy;
+                this.sy += 0.05;
+                this.size -= 0.02;
+            }
+
+            Firework.prototype.draw = function() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            const fireworks = [];
+
+            function animate() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                if (Math.random() < 0.05) fireworks.push(new Firework());
+
+                for (let i = 0; i < fireworks.length; i++) {
+                    fireworks[i].update();
+                    fireworks[i].draw();
+                    if (fireworks[i].size <= 0) fireworks.splice(i, 1);
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
         }
     </script>
 </body>
