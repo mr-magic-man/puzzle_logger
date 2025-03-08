@@ -117,55 +117,60 @@
         const clearButton = document.getElementById('clearButton');
         const exportButton = document.getElementById('exportButton');
         const progressLog = document.getElementById('progressLog');
+        
         let pressCount = -1;
 
+        // Load existing data from local storage
         let storedData = JSON.parse(localStorage.getItem('puzzleProgress')) || [];
         updateLogDisplay();
 
+        // Start Puzzle Button
         startButton.addEventListener('click', () => {
             if (pressCount === -1 || confirm('Are you sure you want to restart the puzzle?')) {
-                pressCount = -1;
+                pressCount = -1; // Reset press count
                 logProgress('Start');
                 createFireworks();
+                alert("Puzzle Started!");
             }
         });
 
+        // Log Progress Button
         logButton.addEventListener('click', () => {
             logProgress('Progress');
         });
 
-        function logProgress(type) {
-            pressCount++;
-            const timestamp = new Date().toISOString().replace('T', ' ').substr(0, 19);
-            const logEntry = { count: pressCount, type: type, timestamp: timestamp };
-            
-            storedData.push(logEntry);
-            localStorage.setItem('puzzleProgress', JSON.stringify(storedData));
-            updateLogDisplay();
-        }
-
+        // Clear Data Button
         clearButton.addEventListener('click', () => {
             if (confirm('Are you sure you want to clear all data?')) {
                 storedData = [];
-                pressCount = -1;
+                pressCount = -1; // Reset press count
                 localStorage.removeItem('puzzleProgress');
                 updateLogDisplay();
+                alert("All data cleared!");
             }
         });
 
+        // Export to XLSX Button
         exportButton.addEventListener('click', () => {
+            if (storedData.length === 0) {
+                alert("No data to export!");
+                return; 
+            }
+            
             const ws = XLSX.utils.json_to_sheet(storedData);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Puzzle Progress");
-            XLSX.writeFile(wb, "puzzle_progress.xlsx");
-        });
+            
+			XLSX.utils.book_append_sheet(wb, ws, "Puzzle Progress");
+			
+			XLSX.writeFile(wb, "puzzle_progress.xlsx");
+			
+			alert("Data exported as puzzle_progress.xlsx!");
+		});
 
-        function updateLogDisplay() {
-            progressLog.innerHTML = storedData.map(entry => 
-                `<p>${entry.type} #${entry.count} at ${entry.timestamp}</p>`
-            ).join('');
-        }
-
-        // Simple fireworks effect
-        function createFireworks() {
-            const canvas = document.getElementById('firewor
+		// Function to log progress
+		function logProgress(type) {
+			pressCount++;
+			const timestamp = new Date().toISOString().replace("T", " ").substr(0,19);
+			const logEntry ={count :pressCount , type,timestamp};
+			storedData.push(logEntry)
+			localStorage.set(`
